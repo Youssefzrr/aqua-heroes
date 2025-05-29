@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Importez useNavigate
-import './LevelSelect.css';
+import { useNavigate } from 'react-router-dom';
+import { auth } from '../services/firebaseConfig';
+import { signOut } from 'firebase/auth';
+import '../styles/LevelSelect.css';
+import Game from './Game';
 
 interface Level {
   id: number;
@@ -23,8 +26,9 @@ const levels: Level[] = [
 
 const LevelSelect: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedLevel, setSelectedLevel] = useState<number | null>(null);
   const levelsPerPage = 10;
-  const navigate = useNavigate(); // Initialisez useNavigate
+  const navigate = useNavigate();
 
   const startIndex = (currentPage - 1) * levelsPerPage;
   const endIndex = startIndex + levelsPerPage;
@@ -50,12 +54,24 @@ const LevelSelect: React.FC = () => {
     );
   };
 
-  // Fonction pour gérer le clic sur un niveau
   const handleLevelClick = (levelId: number, locked: boolean) => {
     if (!locked) {
-      navigate(`/game/${levelId}`); // Redirige vers la page du jeu avec le levelId
+      setSelectedLevel(levelId);
     } else {
       alert('Ce niveau est verrouillé !');
+    }
+  };
+
+  if (selectedLevel) {
+    return <Game levelId={selectedLevel} />;
+  }
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      navigate('/login');
+    } catch (error) {
+      console.error('Error signing out:', error);
     }
   };
 
@@ -66,6 +82,10 @@ const LevelSelect: React.FC = () => {
         <div className="cloud cloud-2"></div>
         <div className="cloud cloud-3"></div>
       </div>
+      
+      <button className="logout-btn" onClick={handleLogout}>
+        Logout
+      </button>
       
       <div className="level-select-board">
         <div className="title-banner">
@@ -80,7 +100,7 @@ const LevelSelect: React.FC = () => {
               <div
                 key={level.id}
                 className={`level-box ${level.locked ? 'locked' : 'unlocked'}`}
-                onClick={() => handleLevelClick(level.id, level.locked)} // Gère le clic
+                onClick={() => handleLevelClick(level.id, level.locked)}
               >
                 {level.locked && <div className="lock-icon">🔒</div>}
                 <div className="level-number">{level.id}</div>
