@@ -1,22 +1,41 @@
-import React from 'react';
-import Game from './components/Game';
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { auth } from './services/firebaseConfig';
+import { User } from 'firebase/auth';
+import FirstPage from './components/first_page';
+import LoginPage from './components/LoginPage';
+import SignupPage from './components/SignupPage';
+import LogoutPage from './components/LogoutPage';
 import LevelSelect from './components/LevelSelect';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
+function App() {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
-const App: React.FC = () => {
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
+      setUser(currentUser);
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  if (loading) {
+    return <div className="loading">Loading...</div>;
+  }
+
   return (
     <Router>
-      <div className="App">
-        <Routes>
-          {/* Route pour la page de sélection des niveaux */}
-          <Route path="/" element={<LevelSelect />} />
-          {/* Route pour la page du jeu (niveau spécifique) */}
-          <Route path="/game/:levelId" element={<Game />} />
-        </Routes>
-      </div>
+      <Routes>
+        <Route path="/" element={<FirstPage />} />
+        <Route path="/login" element={user ? <Navigate to="/level-select" /> : <LoginPage />} />
+        <Route path="/signup" element={user ? <Navigate to="/level-select" /> : <SignupPage />} />
+        <Route path="/logout" element={user ? <LogoutPage /> : <Navigate to="/login" />} />
+        <Route path="/level-select" element={user ? <LevelSelect /> : <Navigate to="/login" />} />
+      </Routes>
     </Router>
   );
-};
+}
 
-export default App; 
+export default App;
