@@ -16,6 +16,95 @@
   justify-content: center;
 }
 
+/* Language Selector Container - Fixed positioning for all languages */
+.language-selector-container {
+  position: absolute;
+  top: 400px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1001;
+}
+
+/* RTL Layout adjustments - Keep same positioning for consistency */
+[dir="rtl"] .language-selector-container {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Arabic text styling */
+[dir="rtl"] h1 {
+  font-family: 'Fredoka One', 'Amiri', cursive;
+  text-align: center;
+}
+
+[dir="rtl"] .mascot-speech {
+  font-family: 'Bubblegum Sans', 'Noto Sans Arabic', cursive;
+  text-align: center;
+}
+
+[dir="rtl"] .start-button {
+  font-family: 'Fredoka One', 'Amiri', cursive;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .language-selector-container {
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  [dir="rtl"] .language-selector-container {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  h1 {
+    font-size: 2.5rem;
+  }
+  
+  .mascot-speech {
+    font-size: 1.5rem;
+  }
+  
+  .start-button {
+    font-size: 1.5rem;
+    padding: 12px 35px;
+  }
+}
+
+@media (max-width: 480px) {
+  .language-selector-container {
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  [dir="rtl"] .language-selector-container {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  h1 {
+    font-size: 2rem;
+  }
+  
+  .mascot-speech {
+    font-size: 1.2rem;
+  }
+  
+  .start-button {
+    font-size: 1.3rem;
+    padding: 10px 30px;
+  }
+  
+  .water-drop-mascot {
+    width: 25%;
+    top: 8%;
+    right: 2%;
+  }
+}
+
 /* Floating bubbles animation */
 .bubbles {
   position: absolute;
@@ -93,15 +182,15 @@
 
 .content-wrapper {
   background: rgba(255, 255, 255, 0.9) !important;
-  padding: 40px 30px;
-  border-radius: 20px;
+  padding: 40px 30px !important;
+  border-radius: 20px !important;
   box-shadow: 
     0 0 20px rgba(0, 0, 0, 0.1),
     0 10px 20px rgba(0, 0, 0, 0.2);
   text-align: center;
   position: relative;
   z-index: 2;
-  max-width: 500px;
+  max-width: 800px !important;
   width: 90%;
   animation: float 6s ease-in-out infinite;
 }
@@ -224,58 +313,4 @@ h1 {
 @keyframes mascotBounce {
   0%, 100% { transform: rotate(-15deg) translateY(0); }
   50% { transform: rotate(-15deg) translateY(-20px); }
-}
-
-@media (max-width: 768px) {
-  h1 {
-    font-size: 2.5rem;
-  }
-  
-  .mascot-speech {
-    font-size: 1.6rem;
-  }
-  
-  .start-button {
-    font-size: 1.5rem;
-    padding: 12px 30px;
-  }
-  
-  .water-drop-mascot {
-    width: 120px;
-    right: -60px;
-    bottom: -10px;
-  }
-  
-  .arrow-image {
-    width: 70px;
-    bottom: 12%;
-    right: 12%;
-  }
-}
-
-@media (max-width: 480px) {
-  h1 {
-    font-size: 2rem;
-  }
-  
-  .mascot-speech {
-    font-size: 1.4rem;
-  }
-  
-  .start-button {
-    font-size: 1.3rem;
-    padding: 10px 25px;
-  }
-  
-  .water-drop-mascot {
-    width: 100px;
-    right: -50px;
-    bottom: -10px;
-  }
-  
-  .arrow-image {
-    width: 60px;
-    bottom: 15%;
-    right: 15%;
-  }
 }
