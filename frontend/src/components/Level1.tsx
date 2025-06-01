@@ -610,11 +610,6 @@ const Level1: React.FC = () => {
         {/* Faucet Area */}
         <div className="faucet-area">
           {/* Task indicator - show dirty when water flowing, clean when stopped */}
-          <img 
-            src={isWaterFlowing ? dirtyImg : cleanImg} 
-            alt={isWaterFlowing ? "Dirty" : "Clean"} 
-            className="task-indicator-image" 
-          />
           <img src={robinetImg} alt="Faucet" className="robinet-image" />
           {isWaterFlowing && (
             <div className="water-flow">
@@ -634,6 +629,15 @@ const Level1: React.FC = () => {
         
         {/* Hide one of the duplicate lakes with a mask */}
         <div className="lake-mask"></div>
+        
+        {/* Lake Task Indicator - positioned in lake area */}
+        <div className="lake-task-area">
+          <img 
+            src={lakeCleaned ? cleanImg : dirtyImg} 
+            alt={lakeCleaned ? "Clean Lake" : "Dirty Lake"} 
+            className="task-indicator-image" 
+          />
+        </div>
         
         {/* Trash near the lake - hide when lake is cleaned */}
         {!lakeCleaned && (

@@ -50,8 +50,8 @@ body, html {
 /* Task Indicator */
 .task-indicator-image {
   position: absolute;
-  top: -500px;
-  left: 51%;
+  top: 80px;
+  right: -150px;
   transform: translateX(-50%);
   width: 250px;
   height: auto;
@@ -1017,4 +1017,26 @@ body, html {
   background: linear-gradient(135deg, #1976D2, #1565C0) !important;
   transform: translateY(-3px);
   box-shadow: 0 8px 20px rgba(33, 150, 243, 0.4);
-} 
+}
+
+/* Lake Task Indicator - Positioned in lake area */
+.lake-task-area {
+  position: absolute;
+  top: 400px;
+  left: 1100px;
+  z-index: 6;
+}
+
+.lake-task-indicator {
+  width: 80px;
+  height: auto;
+  animation: task-pulse 2s ease-in-out infinite;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5)) brightness(1.1) contrast(1.2);
+  transition: all 0.5s ease;
+  border: 3px solid #2196F3;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 5px;
+}
+
+/* Racing Finish Line */ 
