@@ -1034,7 +1034,7 @@ body, html {
   filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5)) brightness(1.1) contrast(1.2);
   transition: all 0.5s ease;
   border: 3px solid #2196F3;
-  border-radius: 10px;
+  border-radius: 8px;
   background: rgba(255, 255, 255, 0.9);
   padding: 5px;
 }

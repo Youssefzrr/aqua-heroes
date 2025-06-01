@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useLanguage } from '../contexts/LanguageContext';
 import '../styles/LevelSelect.css';
 
 interface Level {
   id: number;
   stars: number;
   locked: boolean;
-  title: string;
+  titleKey: string;
   waterSaved: number;
 }
 
@@ -15,70 +16,70 @@ const levels: Level[] = [
     id: 1, 
     stars: 0, 
     locked: false,
-    title: " Water & Lake Conservation",
+    titleKey: "level1Title",
     waterSaved: 0
   },
   { 
     id: 2, 
     stars: 0, 
     locked: true,
-    title: "Water-Conscious Pool Manager",
+    titleKey: "level2Title",
     waterSaved: 0
   },
   { 
     id: 3, 
     stars: 0, 
     locked: true,
-    title: "Eco-Friendly Garden Expert",
+    titleKey: "level3Title",
     waterSaved: 0
   },
   { 
     id: 4, 
     stars: 0, 
     locked: true,
-    title: "Efficient Laundry Specialist",
+    titleKey: "level4Title",
     waterSaved: 0
   },
   { 
     id: 5, 
     stars: 0, 
     locked: true,
-    title: "Sustainable Car Washing",
+    titleKey: "level5Title",
     waterSaved: 0
   },
   { 
     id: 6, 
     stars: 0, 
     locked: true,
-    title: "Water-Conscious Pool Manager 2",
+    titleKey: "level6Title",
     waterSaved: 0
   },
   { 
     id: 7, 
     stars: 0, 
     locked: true,
-    title: "Rainwater Harvesting Pro",
+    titleKey: "level7Title",
     waterSaved: 0
   },
   { 
     id: 8, 
     stars: 0, 
     locked: true,
-    title: "Water Conservation Detective",
+    titleKey: "level8Title",
     waterSaved: 0
   },
   { 
     id: 9, 
     stars: 0, 
     locked: true,
-    title: "Environmental Water Explorer",
+    titleKey: "level9Title",
     waterSaved: 0
   },
   { 
     id: 10, 
     stars: 0, 
     locked: true,
-    title: "Ultimate Water Champion",
+    titleKey: "level10Title",
     waterSaved: 0
   }
 ];
@@ -88,6 +89,7 @@ const LevelSelect: React.FC = () => {
   const [totalWaterSaved, setTotalWaterSaved] = useState(0);
   const levelsPerPage = 5;
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const startIndex = (currentPage - 1) * levelsPerPage;
   const endIndex = startIndex + levelsPerPage;
@@ -117,18 +119,16 @@ const LevelSelect: React.FC = () => {
     if (!locked) {
       navigate(`/Level${levelId}`);
     } else {
-      alert('Complete the previous level first to unlock this one!');
+      alert(t('unlockMessage'));
     }
   };
 
   return (
     <div className="game-container">
-      
-      
       <div className="level-select-board">
         <div className="title-banner">
-          <h1>Water-Saving Adventures</h1>
-          <p className="subtitle">Choose your next mission!</p>
+          <h1>{t('levelSelectTitle')}</h1>
+          <p className="subtitle">{t('levelSelectSubtitle')}</p>
         </div>
         
         <div className="levels-container">
@@ -155,14 +155,14 @@ const LevelSelect: React.FC = () => {
                        level.id === 9 ? '🌍' : '👑'}
                     </div>
                   )}
-                  <div className="level-number">Level {level.id}</div>
-                  <div className="level-title">{level.title}</div>
+                  <div className="level-number">{t('levelLabel')} {level.id}</div>
+                  <div className="level-title">{t(level.titleKey)}</div>
                   
                   {renderStars(level)}
                   {!level.locked && level.waterSaved > 0 && (
                     <div className="water-saved-badge">
                       <span className="droplet">💧</span>
-                      {level.waterSaved}L saved
+                      {level.waterSaved}L {t('waterSaved')}
                     </div>
                   )}
                 </div>
@@ -177,7 +177,7 @@ const LevelSelect: React.FC = () => {
             disabled={!hasPreviousPage}
             onClick={() => setCurrentPage(currentPage - 1)}
           >
-            🌊 Previous
+            {t('previousButton')}
           </button>
           
           <div className="page-dots">
@@ -195,9 +195,12 @@ const LevelSelect: React.FC = () => {
             disabled={!hasNextPage}
             onClick={() => setCurrentPage(currentPage + 1)}
           >
-            Next 🌊
+            {t('nextButton')}
           </button>
         </div>
+
+        {/* Total Water Saved Display */}
+        
       </div>
     </div>
   );

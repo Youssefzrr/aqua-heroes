@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useLanguage } from '../contexts/LanguageContext';
 import child1Img from '../assets/1.png';
 import child2Img from '../assets/2.png';
 import child3Img from '../assets/3.png';
@@ -31,6 +32,7 @@ interface Bubble {
 
 const Level1: React.FC = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [gameStarted, setGameStarted] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [bubbles, setBubbles] = useState<Bubble[]>([]);
@@ -233,7 +235,7 @@ const Level1: React.FC = () => {
   };
 
   const handleMainMenu = () => {
-    navigate('/level-select');
+    navigate('/');
   };
 
   // Countdown timer effect
@@ -395,15 +397,15 @@ const Level1: React.FC = () => {
 
               {/* Content */}
               <div className="message-content">
-                <h2 className="message-title">WATER HERO MISSION</h2>
+                <h2 className="message-title">{t('missionStartTitle')}</h2>
 
                 <div className="objectives-box">
                   <p className="objectives-text">
-                    Welcome to the Garden of Conservation! Your mission: 
-                    <br />🚶‍♂️ Explore the beautiful garden path
-                    <br />🚰 Find the water-wasting faucet
-                    <br />💧 Turn off the faucet to save water
-                    <br />🌱 Help protect our precious water resources!
+                    {t('missionWelcome')}
+                    <br />🚶‍♂️ {t('missionExplore')}
+                    <br />🚰 {t('missionFind')}
+                    <br />💧 {t('missionTurnOff')}
+                    <br />🌱 {t('missionProtect')}
                   </p>
                 </div>
 
@@ -415,7 +417,7 @@ const Level1: React.FC = () => {
                     onMouseLeave={() => setIsHovered(false)}
                     onClick={handleStartGame}
                   >
-                    <span className="button-text">START MISSION!</span>
+                    <span className="button-text">{t('startMissionButton')}</span>
                     {isHovered && (
                       <div className="button-bubbles">
                         <div className="button-bubble bubble1" />
@@ -473,14 +475,14 @@ const Level1: React.FC = () => {
 
               {/* Content */}
               <div className="message-content">
-                <h2 className="message-title">💧 WATER CONSERVATION ALERT! 💧</h2>
+                <h2 className="message-title">💧 {t('waterConservationAlert')} 💧</h2>
 
                 <div className="objectives-box">
                   <p className="objectives-text">
-                    You found a running faucet wasting precious water!
-                    <br />💧 Every drop counts for our planet
-                    <br />🌍 Help save our precious water resources
-                    <br />🚰 What would you like to do?
+                    {t('faucetFoundMessage')}
+                    <br />💧 {t('everyDropCounts')}
+                    <br />🌍 {t('helpSaveResources')}
+                    <br />🚰 {t('faucetQuestion')}
                   </p>
                 </div>
 
@@ -490,13 +492,13 @@ const Level1: React.FC = () => {
                     className="start-button yes-button-styled"
                     onClick={() => handleFaucetResponse(true)}
                   >
-                    <span className="button-text">Yes, Turn Off!</span>
+                    <span className="button-text">{t('turnOffFaucet')}</span>
                   </button>
                   <button
                     className="start-button no-button-styled"
                     onClick={() => handleFaucetResponse(false)}
                   >
-                    <span className="button-text">No, Leave It</span>
+                    <span className="button-text">{t('leaveFaucet')}</span>
                   </button>
                 </div>
               </div>
@@ -547,14 +549,14 @@ const Level1: React.FC = () => {
 
               {/* Content */}
               <div className="message-content">
-                <h2 className="message-title">🐠 SAVE THE FISH! 🐠</h2>
+                <h2 className="message-title">🐠 {t('saveFishTitle')} 🐠</h2>
 
                 <div className="objectives-box">
                   <p className="objectives-text">
-                    The lake is polluted with trash and the fish are in danger!
-                    <br />🐟 Poor fish are struggling to survive
-                    <br />🗑️ Trash is polluting their home
-                    <br />💚 Do you want to clean the lake and save them?
+                    {t('lakePolluteMessage')}
+                    <br />🐟 {t('fishStruggling')}
+                    <br />🗑️ {t('trashPolluting')}
+                    <br />💚 {t('cleanLakeQuestion')}
                   </p>
                 </div>
 
@@ -564,13 +566,13 @@ const Level1: React.FC = () => {
                     className="start-button yes-button-styled"
                     onClick={() => handleLakeResponse(true)}
                   >
-                    <span className="button-text">Yes, Save Fish!</span>
+                    <span className="button-text">{t('saveFishButton')}</span>
                   </button>
                   <button
                     className="start-button no-button-styled"
                     onClick={() => handleLakeResponse(false)}
                   >
-                    <span className="button-text">No, Leave It</span>
+                    <span className="button-text">{t('leaveLakeButton')}</span>
                   </button>
                 </div>
               </div>
@@ -604,7 +606,7 @@ const Level1: React.FC = () => {
         {/* Racing Finish Line */}
         <div className="finish-line-area">
           <img src={finishLineImg} alt="Finish Line" className="finish-line-image" />
-          <div className="finish-text">FINISH</div>
+          <div className="finish-text">{t('finishText')}</div>
         </div>
         
         {/* Faucet Area */}
@@ -685,7 +687,7 @@ const Level1: React.FC = () => {
         <div className="game-ui">
           {/* Star Display */}
           <div className="stars-container">
-            <div className="stars-label">Progress:</div>
+            <div className="stars-label">{t('progressLabel')}</div>
             <div className="stars-display">
               {[1, 2, 3].map((star) => (
                 <div 
@@ -700,7 +702,7 @@ const Level1: React.FC = () => {
 
           {/* Countdown Timer */}
           <div className="timer-container">
-            <div className="timer-label">Time:</div>
+            <div className="timer-label">{t('timeLabel')}</div>
             <div className={`timer-display ${timeLeft <= 10 ? 'warning' : ''} ${timeLeft <= 0 ? 'expired' : ''}`}>
               {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')}
             </div>
@@ -710,11 +712,11 @@ const Level1: React.FC = () => {
           <div className="tasks-container">
             <div className="task-item">
               <span className={`task-icon ${!isWaterFlowing ? 'completed' : ''}`}>🚰</span>
-              <span className="task-text">Faucet</span>
+              <span className="task-text">{t('faucetTask')}</span>
             </div>
             <div className="task-item">
               <span className={`task-icon ${lakeCleaned ? 'completed' : ''}`}>🌊</span>
-              <span className="task-text">Lake</span>
+              <span className="task-text">{t('lakeTask')}</span>
             </div>
           </div>
         </div>
@@ -751,11 +753,11 @@ const Level1: React.FC = () => {
 
               {/* Results Content */}
               <div className="message-content">
-                <h2 className="message-title">🏆 MISSION COMPLETE! 🏆</h2>
+                <h2 className="message-title">🏆 {t('missionCompleteTitle')} 🏆</h2>
 
                 {/* Stars Earned Display */}
                 <div className="results-stars-container">
-                  <h3 className="results-stars-title">Stars Earned:</h3>
+                  <h3 className="results-stars-title">{t('starsEarnedTitle')}</h3>
                   <div className="results-stars-display">
                     {[1, 2, 3].map((star) => (
                       <div 
@@ -768,9 +770,9 @@ const Level1: React.FC = () => {
                     ))}
                   </div>
                   <div className="stars-breakdown">
-                    <p>✅ Task Completion: {tasksCompleted}/2 stars</p>
-                    {timeBonus && <p>⚡ Time Bonus: 1 star</p>}
-                    <p className="total-stars">Total: {starsEarned}/3 stars</p>
+                    <p>✅ {t('taskCompletion')} {tasksCompleted}/2 {t('starsUnit')}</p>
+                    {timeBonus && <p>⚡ {t('timeBonus')}</p>}
+                    <p className="total-stars">{t('totalStars')} {starsEarned}/3 {t('starsUnit')}</p>
                   </div>
                 </div>
 
@@ -780,13 +782,13 @@ const Level1: React.FC = () => {
                     className="start-button next-level-button"
                     onClick={handleNextLevel}
                   >
-                    <span className="button-text">Next Level 🚀</span>
+                    <span className="button-text">{t('nextLevelButton')}</span>
                   </button>
                   <button
                     className="start-button main-menu-button"
                     onClick={handleMainMenu}
                   >
-                    <span className="button-text">Main Menu 🏠</span>
+                    <span className="button-text">{t('mainMenuButton')}</span>
                   </button>
                 </div>
               </div>

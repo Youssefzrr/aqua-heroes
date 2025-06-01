@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../services/firebaseConfig';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { useLanguage } from '../contexts/LanguageContext';
 import '../styles/SignupPage.css';
 
 const SignupPage: React.FC = () => {
@@ -9,6 +10,7 @@ const SignupPage: React.FC = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,19 +20,19 @@ const SignupPage: React.FC = () => {
       navigate('/login');
     } catch (err: any) {
       console.log(err);
-      let errorMessage = 'An error occurred during signup.';
+      let errorMessage = t('errorSignup');
       switch (err.code) {
         case 'auth/email-already-in-use':
-          errorMessage = 'This email is already registered.';
+          errorMessage = t('errorEmailInUse');
           break;
         case 'auth/invalid-email':
-          errorMessage = 'Invalid email address.';
+          errorMessage = t('errorInvalidEmail');
           break;
         case 'auth/weak-password':
-          errorMessage = 'Password is too weak. Use at least 6 characters.';
+          errorMessage = t('errorWeakPassword');
           break;
         case 'auth/operation-not-allowed':
-          errorMessage = 'Email/Password authentication is not enabled.';
+          errorMessage = t('errorAuthDisabled');
           break;
         default:
           errorMessage = err.message || errorMessage;
@@ -42,29 +44,29 @@ const SignupPage: React.FC = () => {
   return (
     <div className="signup-container">
       <div className="content-wrapper">
-        <h2>Join AquaHeroes</h2>
-        <p>Create an account to start saving water!</p>
+        <h2>{t('signupTitle')}</h2>
+        <p>{t('signupSubtitle')}</p>
         {error && <p className="error">{error}</p>}
         <form onSubmit={handleSignup}>
           <input
             type="email"
-            placeholder="Email"
+            placeholder={t('emailPlaceholder')}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
           <input
             type="password"
-            placeholder="Password"
+            placeholder={t('passwordPlaceholder')}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <button type="submit" className="signup-button">Sign Up</button>
+          <button type="submit" className="signup-button">{t('signupButton')}</button>
         </form>
         <p className="redirect-text">
-          Already have an account?{' '}
-          <a href="/login" className="redirect-link">Log In</a>
+          {t('haveAccount')}{' '}
+          <a href="/login" className="redirect-link">{t('loginLink')}</a>
         </p>
       </div>
     </div>
