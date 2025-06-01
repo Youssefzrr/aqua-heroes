@@ -7,7 +7,7 @@ import LoginPage from './components/LoginPage';
 import SignupPage from './components/SignupPage';
 import LogoutPage from './components/LogoutPage';
 import LevelSelect from './components/LevelSelect';
-
+import Level1 from './components/Level1';
 function App() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
@@ -33,6 +33,7 @@ function App() {
         <Route path="/signup" element={user ? <Navigate to="/level-select" /> : <SignupPage />} />
         <Route path="/logout" element={user ? <LogoutPage /> : <Navigate to="/login" />} />
         <Route path="/level-select" element={user ? <LevelSelect /> : <Navigate to="/login" />} />
+        <Route path="/Level1" element={user ? <Level1 /> : <Navigate to="/login" />} />
       </Routes>
     </Router>
   );
