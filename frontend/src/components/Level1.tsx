@@ -7,6 +7,7 @@ import child4Img from '../assets/4.png';
 import child5Img from '../assets/5.png';
 import borderImg from '../assets/background.png';
 import robinetImg from '../assets/roubini.png';
+import dirtyImg from '../assets/dirty.png';
 import '../styles/Level1.css';
 import '../styles/Level1Message.css';
 
@@ -64,7 +65,7 @@ const Level1: React.FC = () => {
     console.log('Game started?', gameStarted);
     console.log('Dialog shown?', faucetDialogShown);
     console.log('Water flowing?', isWaterFlowing);
-    return distance > 1000; // Fixed condition based on actual behavior
+    return distance > 1200; // Fixed condition based on actual behavior
   };
 
   // Load background animation frames
@@ -399,6 +400,8 @@ const Level1: React.FC = () => {
         
         {/* Faucet Area */}
         <div className="faucet-area">
+          {/* Task indicator */}
+          <img src={dirtyImg} alt="Dirty" className="task-indicator-image" />
           <img src={robinetImg} alt="Faucet" className="robinet-image" />
           {isWaterFlowing && (
             <div className="water-flow">

@@ -47,6 +47,30 @@ body, html {
   z-index: 5;
 }
 
+/* Task Indicator */
+.task-indicator-image {
+  position: absolute;
+  top: -500px;
+  left: 51%;
+  transform: translateX(-50%);
+  width: 250px;
+  height: auto;
+  z-index: 6;
+  animation: task-pulse 2s ease-in-out infinite;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5)) brightness(1.1) contrast(1.2);
+}
+
+@keyframes task-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: translateX(-50%) scale(1.1);
+  }
+}
+
 .level1-container .robinet-image {
   width: 40px;
   height: 60px;
