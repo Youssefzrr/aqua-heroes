@@ -233,7 +233,7 @@ const Level1: React.FC = () => {
   };
 
   const handleMainMenu = () => {
-    navigate('/');
+    navigate('/level-select');
   };
 
   // Countdown timer effect
