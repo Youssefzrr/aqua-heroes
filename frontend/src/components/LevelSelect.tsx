@@ -7,89 +7,78 @@ interface Level {
   stars: number;
   locked: boolean;
   title: string;
-  description: string;
   waterSaved: number;
 }
 
 const levels: Level[] = [
   { 
     id: 1, 
-    stars: 3, 
+    stars: 0, 
     locked: false,
-    title: "Bathroom Basics",
-    description: "Help Droplet fix leaky faucets!",
+    title: " Water & Lake Conservation",
     waterSaved: 0
   },
   { 
     id: 2, 
-    stars: 3, 
-    locked: false,
-    title: "Kitchen Hero",
-    description: "Save water while washing dishes!",
+    stars: 0, 
+    locked: true,
+    title: "Water-Conscious Pool Manager",
     waterSaved: 0
   },
   { 
     id: 3, 
-    stars: 3, 
+    stars: 0, 
     locked: true,
-    title: "Garden Guardian",
-    description: "Learn smart plant watering!",
+    title: "Eco-Friendly Garden Expert",
     waterSaved: 0
   },
   { 
     id: 4, 
-    stars: 2, 
+    stars: 0, 
     locked: true,
-    title: "Laundry Master",
-    description: "Become a washing wizard!",
+    title: "Efficient Laundry Specialist",
     waterSaved: 0
   },
   { 
     id: 5, 
-    stars: 1, 
+    stars: 0, 
     locked: true,
-    title: "Car Wash Champion",
-    description: "Clean cars, save water!",
+    title: "Sustainable Car Washing",
     waterSaved: 0
   },
   { 
     id: 6, 
-    stars: 3, 
+    stars: 0, 
     locked: true,
-    title: "Pool Party Pro",
-    description: "Pool maintenance made fun!",
+    title: "Water-Conscious Pool Manager 2",
     waterSaved: 0
   },
   { 
     id: 7, 
-    stars: 2, 
+    stars: 0, 
     locked: true,
-    title: "Rain Ranger",
-    description: "Collect rainwater for plants!",
+    title: "Rainwater Harvesting Pro",
     waterSaved: 0
   },
   { 
     id: 8, 
     stars: 0, 
     locked: true,
-    title: "Water Detective",
-    description: "Find hidden water waste!",
+    title: "Water Conservation Detective",
     waterSaved: 0
   },
   { 
     id: 9, 
     stars: 0, 
     locked: true,
-    title: "Eco Explorer",
-    description: "Discover water-saving secrets!",
+    title: "Environmental Water Explorer",
     waterSaved: 0
   },
   { 
     id: 10, 
     stars: 0, 
     locked: true,
-    title: "Super Saver",
-    description: "Become the ultimate water hero!",
+    title: "Ultimate Water Champion",
     waterSaved: 0
   }
 ];
@@ -176,7 +165,7 @@ const LevelSelect: React.FC = () => {
                   )}
                   <div className="level-number">Level {level.id}</div>
                   <div className="level-title">{level.title}</div>
-                  <div className="level-description">{level.description}</div>
+                  
                   {renderStars(level)}
                   {!level.locked && level.waterSaved > 0 && (
                     <div className="water-saved-badge">
