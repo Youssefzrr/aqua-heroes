@@ -48,6 +48,12 @@ const Level1: React.FC = () => {
   const [currentBackgroundFrame, setCurrentBackgroundFrame] = useState(0);
   const [levelCompleted, setLevelCompleted] = useState(false);
   const [showCompletionDialog, setShowCompletionDialog] = useState(false);
+  const [starsEarned, setStarsEarned] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(60); // 60 seconds countdown
+  const [timerActive, setTimerActive] = useState(false);
+  const [timeBonus, setTimeBonus] = useState(false);
+  const [showResultsDialog, setShowResultsDialog] = useState(false);
+  const [tasksCompleted, setTasksCompleted] = useState(0);
   const imgRef = useRef<HTMLImageElement>(null);
   const backgroundImgRef = useRef<HTMLImageElement>(null);
   const currentIndexRef = useRef(0);
@@ -113,8 +119,8 @@ const Level1: React.FC = () => {
     console.log('Character pos:', charPos);
     console.log('Finish line pos:', finishLinePosition);
     console.log('Distance:', distance);
-    console.log('Is near finish line?', distance < 100);
-    return distance < 100;
+    console.log('Is near finish line?', distance < 350);
+    return distance < 350; // Updated distance threshold
   };
 
   // Load background animation frames
@@ -174,12 +180,24 @@ const Level1: React.FC = () => {
 
   const handleStartGame = () => {
     setGameStarted(true);
+    setTimerActive(true); // Start the countdown when game starts
+  };
+
+  // Function to award stars based on task completion
+  const awardStar = (taskType: 'faucet' | 'lake') => {
+    setTasksCompleted(prev => {
+      const newCount = prev + 1;
+      setStarsEarned(newCount); // Award 1 star per task completed
+      console.log(`⭐ Star awarded for ${taskType} task! Total stars: ${newCount}`);
+      return newCount;
+    });
   };
 
   const handleFaucetResponse = (turnOff: boolean) => {
     if (turnOff) {
       setIsWaterFlowing(false);
       setFaucetTaskCompleted(true);
+      awardStar('faucet'); // Award star for faucet task
     }
     setShowFaucetDialog(false);
     setFaucetDialogShown(true);
@@ -188,19 +206,53 @@ const Level1: React.FC = () => {
   const handleLakeResponse = (cleanLake: boolean) => {
     if (cleanLake) {
       setLakeCleaned(true);
+      awardStar('lake'); // Award star for lake task
     }
     setShowLakeDialog(false);
     setLakeDialogShown(true);
   };
 
   const handleLevelCompletion = () => {
+    setTimerActive(false); // Stop timer
+    
+    // Award time bonus star if timer hasn't run out
+    if (timeLeft > 0 && tasksCompleted >= 2) {
+      setTimeBonus(true);
+      setStarsEarned(3);
+      console.log('⭐ Time bonus star awarded!');
+    }
+    
     setLevelCompleted(true);
-    setShowCompletionDialog(false);
-    // Navigate to level select or next level
-    setTimeout(() => {
-      navigate('/level-select');
-    }, 2000);
+    setShowResultsDialog(true);
   };
+
+  const handleNextLevel = () => {
+    // Navigate to next level (Level 2)
+    console.log('Proceeding to next level...');
+    navigate('/level-select'); // For now, go back to level select
+  };
+
+  const handleMainMenu = () => {
+    navigate('/');
+  };
+
+  // Countdown timer effect
+  useEffect(() => {
+    if (!timerActive || timeLeft <= 0) return;
+
+    const timer = setInterval(() => {
+      setTimeLeft(prev => {
+        if (prev <= 1) {
+          setTimerActive(false);
+          console.log('⏰ Time\'s up!');
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [timerActive, timeLeft]);
 
   useEffect(() => {
     if (!gameStarted) return;
@@ -304,11 +356,11 @@ const Level1: React.FC = () => {
     }
 
     // Check finish line proximity (only if both tasks completed)
-    if (!levelCompleted && !showCompletionDialog && lakeCleaned && !isWaterFlowing && isNearFinishLine(position)) {
+    if (!levelCompleted && !showResultsDialog && lakeCleaned && !isWaterFlowing && isNearFinishLine(position)) {
       console.log('🏁 FINISH LINE REACHED! Level completed!');
-      setShowCompletionDialog(true);
+      handleLevelCompletion();
     }
-  }, [position, gameStarted, faucetDialogShown, isWaterFlowing, lakeDialogShown, lakeCleaned, levelCompleted, showCompletionDialog]);
+  }, [position, gameStarted, faucetDialogShown, isWaterFlowing, lakeDialogShown, lakeCleaned, levelCompleted, showResultsDialog]);
 
   return (
     <div className="level1-container">
@@ -538,75 +590,6 @@ const Level1: React.FC = () => {
         </div>
       )}
 
-      {/* Level Completion Dialog */}
-      {showCompletionDialog && (
-        <div className="level1-message-overlay">
-          <div className="message-wrapper">
-            {/* Animated bubbles */}
-            <div className="bubbles-container">
-              {bubbles.map((bubble) => (
-                <div
-                  key={bubble.id}
-                  className="bubble"
-                  style={{
-                    width: `${bubble.size}px`,
-                    height: `${bubble.size}px`,
-                    left: `${bubble.left}%`,
-                    top: `${bubble.top}%`,
-                    animationDuration: `${bubble.duration}s`,
-                    animationDelay: `${bubble.delay}s`,
-                  }}
-                />
-              ))}
-            </div>
-
-            {/* Message box */}
-            <div className="message-box">
-              {/* Wave decoration at top */}
-              <div className="wave-top">
-                <div className="wave-shape" />
-              </div>
-
-              {/* Content */}
-              <div className="message-content">
-                <h2 className="message-title">🏆 LEVEL COMPLETED! 🏆</h2>
-
-                <div className="objectives-box">
-                  <p className="objectives-text">
-                    Congratulations, Water Hero!
-                    <br />✅ You turned off the wasting faucet
-                    <br />✅ You cleaned the polluted lake
-                    <br />✅ You saved precious water resources!
-                    <br />🌍 The planet thanks you for your efforts!
-                  </p>
-                </div>
-
-                {/* Completion Button */}
-                <div className="button-container">
-                  <button
-                    className="start-button completion-button-styled"
-                    onClick={handleLevelCompletion}
-                  >
-                    <span className="button-text">Continue Adventure!</span>
-                  </button>
-                </div>
-              </div>
-
-              {/* Wave decoration at bottom */}
-              <div className="wave-bottom">
-                <div className="wave-shape" />
-              </div>
-            </div>
-
-            {/* Celebration elements */}
-            <div className="celebration-left">🎉</div>
-            <div className="celebration-right">🎊</div>
-            <div className="trophy-1">🏆</div>
-            <div className="trophy-2">⭐</div>
-          </div>
-        </div>
-      )}
-
       <div className="garden-background">
         {/* Animated Background */}
         {backgroundFrames.length > 0 && (
@@ -692,6 +675,132 @@ const Level1: React.FC = () => {
           <img ref={imgRef} src={child1Img} alt="Child character" />
         </div>
       </div>
+
+      {/* Game UI - Stars and Timer */}
+      {gameStarted && (
+        <div className="game-ui">
+          {/* Star Display */}
+          <div className="stars-container">
+            <div className="stars-label">Progress:</div>
+            <div className="stars-display">
+              {[1, 2, 3].map((star) => (
+                <div 
+                  key={star} 
+                  className={`star ${star <= starsEarned ? 'filled' : 'empty'} ${star === starsEarned ? 'filling' : ''}`}
+                >
+                  ⭐
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Countdown Timer */}
+          <div className="timer-container">
+            <div className="timer-label">Time:</div>
+            <div className={`timer-display ${timeLeft <= 10 ? 'warning' : ''} ${timeLeft <= 0 ? 'expired' : ''}`}>
+              {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')}
+            </div>
+          </div>
+
+          {/* Task Progress */}
+          <div className="tasks-container">
+            <div className="task-item">
+              <span className={`task-icon ${!isWaterFlowing ? 'completed' : ''}`}>🚰</span>
+              <span className="task-text">Faucet</span>
+            </div>
+            <div className="task-item">
+              <span className={`task-icon ${lakeCleaned ? 'completed' : ''}`}>🌊</span>
+              <span className="task-text">Lake</span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Results Dialog */}
+      {showResultsDialog && (
+        <div className="level1-message-overlay">
+          <div className="message-wrapper">
+            {/* Animated bubbles */}
+            <div className="bubbles-container">
+              {bubbles.map((bubble) => (
+                <div
+                  key={bubble.id}
+                  className="bubble"
+                  style={{
+                    width: `${bubble.size}px`,
+                    height: `${bubble.size}px`,
+                    left: `${bubble.left}%`,
+                    top: `${bubble.top}%`,
+                    animationDuration: `${bubble.duration}s`,
+                    animationDelay: `${bubble.delay}s`,
+                  }}
+                />
+              ))}
+            </div>
+
+            {/* Results box */}
+            <div className="message-box results-box">
+              {/* Wave decoration at top */}
+              <div className="wave-top">
+                <div className="wave-shape" />
+              </div>
+
+              {/* Results Content */}
+              <div className="message-content">
+                <h2 className="message-title">🏆 MISSION COMPLETE! 🏆</h2>
+
+                {/* Stars Earned Display */}
+                <div className="results-stars-container">
+                  <h3 className="results-stars-title">Stars Earned:</h3>
+                  <div className="results-stars-display">
+                    {[1, 2, 3].map((star) => (
+                      <div 
+                        key={star} 
+                        className={`result-star ${star <= starsEarned ? 'earned' : 'not-earned'}`}
+                        style={{ animationDelay: `${star * 0.3}s` }}
+                      >
+                        ⭐
+                      </div>
+                    ))}
+                  </div>
+                  <div className="stars-breakdown">
+                    <p>✅ Task Completion: {tasksCompleted}/2 stars</p>
+                    {timeBonus && <p>⚡ Time Bonus: 1 star</p>}
+                    <p className="total-stars">Total: {starsEarned}/3 stars</p>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="button-container">
+                  <button
+                    className="start-button next-level-button"
+                    onClick={handleNextLevel}
+                  >
+                    <span className="button-text">Next Level 🚀</span>
+                  </button>
+                  <button
+                    className="start-button main-menu-button"
+                    onClick={handleMainMenu}
+                  >
+                    <span className="button-text">Main Menu 🏠</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Wave decoration at bottom */}
+              <div className="wave-bottom">
+                <div className="wave-shape" />
+              </div>
+            </div>
+
+            {/* Celebration elements */}
+            <div className="celebration-left">🎉</div>
+            <div className="celebration-right">🎊</div>
+            <div className="trophy-1">🏆</div>
+            <div className="trophy-2">⭐</div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
