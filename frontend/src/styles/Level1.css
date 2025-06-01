@@ -581,4 +581,128 @@ body, html {
   background: #87CEEB; /* Match the sky blue background */
   z-index: 2;
   border-radius: 25px;
+}
+
+/* Racing Finish Line */
+.finish-line-area {
+  position: absolute;
+  top: 350px;
+  left: 49%;
+  transform: translateX(-50%);
+  width: 150px;
+  height: 150px;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.finish-line-image {
+  width: 100%;
+  height: auto;
+  opacity: 0.9;
+  filter: drop-shadow(0 4px 15px rgba(0, 0, 0, 0.3));
+}
+
+.finish-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 18px;
+  font-weight: bold;
+  color: #d31a1a;
+  text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.8);
+  letter-spacing: 3px;
+  animation: finish-glow 3s ease-in-out infinite;
+  z-index: 5;
+}
+
+@keyframes finish-glow {
+  0%, 100% {
+    color: #333;
+    text-shadow: 2px 2px 4px rgba(43, 35, 35, 0.8);
+  }
+  50% {
+    color: #e71313;
+    text-shadow: 0 0 15px rgba(196, 78, 78, 0.8);
+  }
+}
+
+/* Level Completion Dialog Styles */
+.completion-button-styled {
+  background: linear-gradient(135deg, #FFD700, #FFA500) !important;
+  border-color: #FFD700 !important;
+  color: #333 !important;
+  font-weight: bold;
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+}
+
+.completion-button-styled:hover {
+  background: linear-gradient(135deg, #FFA500, #FF8C00) !important;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(255, 140, 0, 0.6);
+}
+
+.celebration-left {
+  position: absolute;
+  left: -40px;
+  top: 15%;
+  font-size: 32px;
+  animation: celebration-bounce-left 1.5s infinite ease-in-out;
+  z-index: 3;
+}
+
+.celebration-right {
+  position: absolute;
+  right: -40px;
+  bottom: 15%;
+  font-size: 32px;
+  animation: celebration-bounce-right 1.8s infinite ease-in-out;
+  z-index: 3;
+}
+
+.trophy-1 {
+  position: absolute;
+  left: 10%;
+  top: 5%;
+  font-size: 28px;
+  animation: trophy-float 2s infinite ease-in-out;
+  z-index: 3;
+}
+
+.trophy-2 {
+  position: absolute;
+  right: 15%;
+  top: 80%;
+  font-size: 24px;
+  animation: trophy-float 2.5s infinite ease-in-out 1s;
+  z-index: 3;
+}
+
+@keyframes celebration-bounce-left {
+  0%, 100% {
+    transform: translateX(0) translateY(0) rotate(-10deg);
+  }
+  50% {
+    transform: translateX(15px) translateY(-10px) rotate(10deg);
+  }
+}
+
+@keyframes celebration-bounce-right {
+  0%, 100% {
+    transform: translateX(0) translateY(0) rotate(10deg);
+  }
+  50% {
+    transform: translateX(-15px) translateY(-10px) rotate(-10deg);
+  }
+}
+
+@keyframes trophy-float {
+  0%, 100% {
+    transform: translateY(0) scale(1) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-15px) scale(1.1) rotate(5deg);
+  }
 } 

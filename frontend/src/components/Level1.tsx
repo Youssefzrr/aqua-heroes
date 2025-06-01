@@ -11,6 +11,7 @@ import dirtyImg from '../assets/dirty.png';
 import trashImg from '../assets/trash.png';
 import trashCollectImg from '../assets/trash-collect.png';
 import cleanImg from '../assets/clean.png';
+import finishLineImg from '../assets/finish-line.png';
 import '../styles/Level1.css';
 import '../styles/Level1Message.css';
 
@@ -45,6 +46,8 @@ const Level1: React.FC = () => {
   const [faucetTaskCompleted, setFaucetTaskCompleted] = useState(false);
   const [backgroundFrames, setBackgroundFrames] = useState<string[]>([]);
   const [currentBackgroundFrame, setCurrentBackgroundFrame] = useState(0);
+  const [levelCompleted, setLevelCompleted] = useState(false);
+  const [showCompletionDialog, setShowCompletionDialog] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
   const backgroundImgRef = useRef<HTMLImageElement>(null);
   const currentIndexRef = useRef(0);
@@ -63,6 +66,12 @@ const Level1: React.FC = () => {
   const lakePosition = { 
     x: 990, // Left position matching trash areas
     y: 510 // Center of trash areas (between 500px and 520px)
+  };
+
+  // Finish line position (at top of road)
+  const finishLinePosition = { 
+    x: window.innerWidth / 2, // Center of screen
+    y: 80 // Top of the road
   };
 
   // Check if character is near faucet
@@ -93,6 +102,19 @@ const Level1: React.FC = () => {
     console.log('Is near lake?', distance < 150);
     console.log('Lake cleaned?', lakeCleaned);
     return distance < 150; // Normal distance check for lake
+  };
+
+  // Check if character is near finish line
+  const isNearFinishLine = (charPos: Position) => {
+    const distance = Math.sqrt(
+      Math.pow(charPos.x - finishLinePosition.x, 2) + Math.pow(charPos.y - finishLinePosition.y, 2)
+    );
+    console.log('=== FINISH LINE PROXIMITY CHECK ===');
+    console.log('Character pos:', charPos);
+    console.log('Finish line pos:', finishLinePosition);
+    console.log('Distance:', distance);
+    console.log('Is near finish line?', distance < 100);
+    return distance < 100;
   };
 
   // Load background animation frames
@@ -169,6 +191,15 @@ const Level1: React.FC = () => {
     }
     setShowLakeDialog(false);
     setLakeDialogShown(true);
+  };
+
+  const handleLevelCompletion = () => {
+    setLevelCompleted(true);
+    setShowCompletionDialog(false);
+    // Navigate to level select or next level
+    setTimeout(() => {
+      navigate('/level-select');
+    }, 2000);
   };
 
   useEffect(() => {
@@ -271,7 +302,13 @@ const Level1: React.FC = () => {
       console.log('🎯 FAUCET PROXIMITY TRIGGERED! Showing dialog...');
       setShowFaucetDialog(true);
     }
-  }, [position, gameStarted, faucetDialogShown, isWaterFlowing, lakeDialogShown, lakeCleaned]);
+
+    // Check finish line proximity (only if both tasks completed)
+    if (!levelCompleted && !showCompletionDialog && lakeCleaned && !isWaterFlowing && isNearFinishLine(position)) {
+      console.log('🏁 FINISH LINE REACHED! Level completed!');
+      setShowCompletionDialog(true);
+    }
+  }, [position, gameStarted, faucetDialogShown, isWaterFlowing, lakeDialogShown, lakeCleaned, levelCompleted, showCompletionDialog]);
 
   return (
     <div className="level1-container">
@@ -501,6 +538,75 @@ const Level1: React.FC = () => {
         </div>
       )}
 
+      {/* Level Completion Dialog */}
+      {showCompletionDialog && (
+        <div className="level1-message-overlay">
+          <div className="message-wrapper">
+            {/* Animated bubbles */}
+            <div className="bubbles-container">
+              {bubbles.map((bubble) => (
+                <div
+                  key={bubble.id}
+                  className="bubble"
+                  style={{
+                    width: `${bubble.size}px`,
+                    height: `${bubble.size}px`,
+                    left: `${bubble.left}%`,
+                    top: `${bubble.top}%`,
+                    animationDuration: `${bubble.duration}s`,
+                    animationDelay: `${bubble.delay}s`,
+                  }}
+                />
+              ))}
+            </div>
+
+            {/* Message box */}
+            <div className="message-box">
+              {/* Wave decoration at top */}
+              <div className="wave-top">
+                <div className="wave-shape" />
+              </div>
+
+              {/* Content */}
+              <div className="message-content">
+                <h2 className="message-title">🏆 LEVEL COMPLETED! 🏆</h2>
+
+                <div className="objectives-box">
+                  <p className="objectives-text">
+                    Congratulations, Water Hero!
+                    <br />✅ You turned off the wasting faucet
+                    <br />✅ You cleaned the polluted lake
+                    <br />✅ You saved precious water resources!
+                    <br />🌍 The planet thanks you for your efforts!
+                  </p>
+                </div>
+
+                {/* Completion Button */}
+                <div className="button-container">
+                  <button
+                    className="start-button completion-button-styled"
+                    onClick={handleLevelCompletion}
+                  >
+                    <span className="button-text">Continue Adventure!</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Wave decoration at bottom */}
+              <div className="wave-bottom">
+                <div className="wave-shape" />
+              </div>
+            </div>
+
+            {/* Celebration elements */}
+            <div className="celebration-left">🎉</div>
+            <div className="celebration-right">🎊</div>
+            <div className="trophy-1">🏆</div>
+            <div className="trophy-2">⭐</div>
+          </div>
+        </div>
+      )}
+
       <div className="garden-background">
         {/* Animated Background */}
         {backgroundFrames.length > 0 && (
@@ -511,6 +617,12 @@ const Level1: React.FC = () => {
             className="garden-path" 
           />
         )}
+        
+        {/* Racing Finish Line */}
+        <div className="finish-line-area">
+          <img src={finishLineImg} alt="Finish Line" className="finish-line-image" />
+          <div className="finish-text">FINISH</div>
+        </div>
         
         {/* Faucet Area */}
         <div className="faucet-area">
@@ -580,8 +692,6 @@ const Level1: React.FC = () => {
           <img ref={imgRef} src={child1Img} alt="Child character" />
         </div>
       </div>
-
-      {gameStarted }
     </div>
   );
 };
