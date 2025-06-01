@@ -1,116 +1,336 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Bubblegum+Sans&display=swap');
 
 .game-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #b3e5fc 0%, #4fc3f7 100%);
-  font-family: 'Roboto', Arial, sans-serif;
-  overflow: hidden;
+  background: 
+    linear-gradient(135deg, rgba(135, 206, 235, 0.85) 0%, rgba(30, 144, 255, 0.85) 100%),
+    url('/static/background.jpg') no-repeat center center fixed;
+  background-size: cover;
+  padding: 20px;
+  font-family: 'Bubblegum Sans', cursive;
   position: relative;
+  overflow-x: hidden;
 }
 
-.content-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  padding: 40px;
-  border-radius: 15px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  max-width: 500px;
-  width: 90%;
+/* Game Header */
+.game-header {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 20px;
+  border-radius: 30px;
+  margin: 20px auto;
+  max-width: 800px;
   text-align: center;
+  box-shadow: 
+    0 10px 20px rgba(0, 0, 0, 0.1),
+    inset 0 -5px 15px rgba(0, 0, 0, 0.05);
 }
 
-h2 {
+.game-header h2 {
+  font-family: 'Fredoka One', cursive;
+  font-size: 2.5rem;
+  background: linear-gradient(45deg, #00C9FF, #92FE9D);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 15px;
+}
+
+.water-meter {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(0, 201, 255, 0.1);
+  padding: 10px 20px;
+  border-radius: 20px;
+}
+
+.droplet-icon {
   font-size: 2rem;
-  color: #01579b;
-  margin-bottom: 1rem;
-  font-weight: 700;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  animation: dropletPulse 2s infinite;
 }
 
-p {
-  font-size: 1.1rem;
-  color: #0277bd;
-  margin-bottom: 2rem;
+.water-amount {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #00C9FF;
 }
 
-.logout-button {
-  padding: 12px 24px;
-  font-size: 1.1rem;
-  font-weight: 500;
-  border: none;
-  border-radius: 8px;
-  background-color: #d32f2f;
-  color: #ffffff;
+.water-label {
+  font-size: 1.2rem;
+  color: #5D6D7E;
+}
+
+/* Content Wrapper */
+.content-wrapper {
+  max-width: 785px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Tasks Container */
+.tasks-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.task-card {
+  background: white;
+  border-radius: 25px;
+  padding: 25px;
   cursor: pointer;
-  transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
-.logout-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
- logout-button::after {
+.task-card::before {
   content: '';
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  transition: width 0.4s ease, height 0.4s ease;
-}
-
-.logout-button:hover::after {
-  width: 200%;
-  height: 200%;
-}
-
-.game-container::before {
-  content: '';
-  position: absolute;
-  bottom: 0;
+  top: 0;
   left: 0;
   width: 100%;
-  height: 150px;
-  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.2)" fill-opacity="1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,128C960,160,1056,224,1152,224C1248,224,1344,160,1392,128L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') repeat-x;
-  animation: wave 10s linear infinite;
+  height: 100%;
+  background: linear-gradient(45deg, rgba(0, 201, 255, 0.1), rgba(146, 254, 157, 0.1));
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
-@keyframes wave {
-  0% {
-    background-position: 0 bottom;
+.task-card:hover {
+  transform: translateY(-5px);
+}
+
+.task-card:hover::before {
+  opacity: 1;
+}
+
+.task-card.completed {
+  background: linear-gradient(45deg, #92FE9D, #00C9FF);
+  color: white;
+  cursor: default;
+}
+
+.task-icon {
+  font-size: 3rem;
+  margin-bottom: 15px;
+  animation: iconFloat 3s ease-in-out infinite;
+}
+
+.task-description {
+  font-size: 1.4rem;
+  color: #2C3E50;
+  margin-bottom: 15px;
+  line-height: 1.4;
+}
+
+.task-card.completed .task-description {
+  color: white;
+}
+
+.task-water-saved {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(0, 201, 255, 0.1);
+  padding: 8px 15px;
+  border-radius: 20px;
+  font-size: 1.2rem;
+  color: #00C9FF;
+}
+
+.task-card.completed .task-water-saved {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.completion-badge {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 8px 15px;
+  border-radius: 20px;
+  font-size: 1.1rem;
+  color: #00C9FF;
+  animation: badgePulse 2s infinite;
+}
+
+/* Navigation Buttons */
+.navigation-buttons {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.back-button {
+  padding: 15px 30px;
+  font-size: 1.4rem;
+  font-family: 'Bubblegum Sans', cursive;
+  background: linear-gradient(45deg, #FF6B6B, #FFE66D);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.back-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.button-icon {
+  font-size: 1.6rem;
+}
+
+/* Celebration Overlay */
+.celebration-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.celebration-content {
+  background: white;
+  padding: 40px;
+  border-radius: 30px;
+  text-align: center;
+  animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.celebration-content h2 {
+  font-family: 'Fredoka One', cursive;
+  font-size: 2.5rem;
+  background: linear-gradient(45deg, #00C9FF, #92FE9D);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 20px;
+}
+
+.celebration-content p {
+  font-size: 1.6rem;
+  color: #5D6D7E;
+  margin-bottom: 10px;
+}
+
+/* Animations */
+@keyframes dropletPulse {
+  0%, 100% {
+    transform: scale(1);
   }
-  100% {
-    background-position: 1440px bottom;
+  50% {
+    transform: scale(1.2);
   }
 }
 
-@media (max-width: 600px) {
-  h2 {
-    font-size: 1.5rem;
+@keyframes iconFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes badgePulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes popIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .game-header {
+    margin-top: 0;
   }
 
-  p {
+  .game-header h2 {
+    font-size: 2rem;
+  }
+
+  .tasks-container {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .task-description {
+    font-size: 1.2rem;
+  }
+
+  .back-button {
+    padding: 12px 25px;
+    font-size: 1.2rem;
+  }
+
+  .celebration-content {
+    padding: 30px;
+    margin: 20px;
+  }
+
+  .celebration-content h2 {
+    font-size: 2rem;
+  }
+
+  .celebration-content p {
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .game-header h2 {
+    font-size: 1.8rem;
+  }
+
+  .water-meter {
+    flex-direction: column;
+    padding: 15px;
+  }
+
+  .task-icon {
+    font-size: 2.5rem;
+  }
+
+  .task-description {
+    font-size: 1.1rem;
+  }
+
+  .completion-badge {
     font-size: 1rem;
-  }
-
-  .content-wrapper {
-    padding: 20px;
-  }
-
-  .logout-button {
-    font-size: 0.9rem;
-    padding: 10px;
+    padding: 6px 12px;
   }
 }

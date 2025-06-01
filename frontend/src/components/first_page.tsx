@@ -5,17 +5,39 @@ import '../styles/FirstPage.css';
 const FirstPage: React.FC = () => {
   return (
     <div className="first-page-container">
+      {/* Floating bubbles background */}
+      <div className="bubbles">
+        <div className="bubble"></div>
+        <div className="bubble"></div>
+        <div className="bubble"></div>
+        <div className="bubble"></div>
+        <div className="bubble"></div>
+      </div>
+      
       <div className="content-wrapper">
-        <h1>Welcome to AquaHeroes</h1>
-        <p>Join the wave of water conservation champions!</p>
+        <h1>AquaHeroes</h1>
+        <div className="mascot-speech">Save Water, Be a Hero!</div>
         <div className="button-container">
-          <Link to="/login">
-            <button className="start-button">Log In</button>
-          </Link>
-          <Link to="/signup">
-            <button className="create-account-button">Sign Up</button>
+          <Link to="/level-select">
+            <button className="start-button">Start Adventure!</button>
           </Link>
         </div>
+        
+        {/* Water drop mascot image */}
+        <img 
+          src={`${process.env.PUBLIC_URL}/static/waterdrop02.png`} 
+          alt="Water Drop Mascot" 
+          className="water-drop-mascot" 
+          />
+        <div className="water-drop-mascot" ></div>
+
+        {/* Arrow image */}
+        <img 
+          src={`${process.env.PUBLIC_URL}/static/arrow05.png`} 
+          alt="Arrow" 
+          className="arrow-image" 
+        />
+        
       </div>
     </div>
   );
